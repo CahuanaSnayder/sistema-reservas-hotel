@@ -2,11 +2,6 @@
 
 Proyecto final del curso **Diseño de Patrones**. Aplicación de escritorio en **Java 17 + Swing** con persistencia en **PostgreSQL**, que gestiona huéspedes, habitaciones, servicios adicionales y el ciclo de vida completo de una reserva (registro → pago → check-in → consumos → check-out).
 
-## 🎥 Video de presentación
-
-[![Ver el video de presentación en YouTube](https://img.youtube.com/vi/_LJDWIChMV0/hqdefault.jpg)](https://youtu.be/_LJDWIChMV0)
-
-▶️ **[Ver en YouTube](https://youtu.be/_LJDWIChMV0)**
 
 ## Patrones aplicados
 
