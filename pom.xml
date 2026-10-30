@@ -50,6 +50,8 @@
                 <configuration>
                     <release>17</release>
                     <encoding>UTF-8</encoding>
+                    <!-- Spring necesita los nombres de parámetros para @PathVariable -->
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>
