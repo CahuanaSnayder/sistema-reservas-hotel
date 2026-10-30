@@ -323,7 +323,7 @@ async function vistaReservas() {
             el('h2', {}, 'Reservas'),
             el('button', { class: 'btn primario', onclick: nuevaReserva }, '+ Nueva reserva')),
         el('div', { class: 'tarjeta' }, tabla(columnas, reservas, 'Aún no hay reservas registradas.')),
-        panelConsumos
+        ...(panelConsumos ? [panelConsumos] : [])
     );
 }
 
