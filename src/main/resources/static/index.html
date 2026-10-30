@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema de Reservas de Hotel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ---------- Inicio de sesión ---------- -->
+<section id="vista-login" class="login" hidden>
+    <form id="form-login" class="login-card">
+        <div class="logo">🏨</div>
+        <h1>Sistema de Reservas</h1>
+        <p class="sub">Ingrese sus credenciales para continuar</p>
+        <label>Usuario
+            <input name="usuario" autocomplete="username" required>
+        </label>
+        <label>Contraseña
+            <input name="contrasena" type="password" autocomplete="current-password" required>
+        </label>
+        <button type="submit" class="btn primario ancho">Iniciar sesión</button>
+        <p id="login-error" class="error" role="alert"></p>
+    </form>
+</section>
+
+<!-- ---------- Aplicación ---------- -->
+<div id="vista-app" class="app" hidden>
+    <header class="barra">
+        <div class="marca">🏨 <span>Reservas de Hotel</span></div>
+        <nav id="menu" class="menu">
+            <button data-seccion="reservas" class="activo">Reservas</button>
+            <button data-seccion="huespedes">Huéspedes</button>
+            <button data-seccion="habitaciones">Habitaciones</button>
+            <button data-seccion="servicios">Servicios</button>
+            <button data-seccion="reportes">Reportes</button>
+        </nav>
+        <div class="usuario">
+            <span id="nombre-usuario"></span>
+            <button id="btn-salir" class="btn texto">Salir</button>
+        </div>
+    </header>
+
+    <main id="contenido" class="contenido"></main>
+</div>
+
+<!-- ---------- Diálogo genérico para formularios ---------- -->
+<dialog id="dialogo">
+    <form id="form-dialogo" method="dialog">
+        <h2 id="dialogo-titulo"></h2>
+        <div id="dialogo-campos" class="campos"></div>
+        <p id="dialogo-error" class="error" role="alert"></p>
+        <div class="acciones">
+            <button type="button" id="dialogo-cancelar" class="btn">Cancelar</button>
+            <button type="submit" class="btn primario">Guardar</button>
+        </div>
+    </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
