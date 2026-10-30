@@ -140,7 +140,7 @@ function abrirFormulario(titulo, campos, valoresIniciales, guardar) {
 
 const catalogos = {
     huespedes: {
-        titulo: 'Huéspedes', singular: 'huésped', ruta: '/huespedes', id: 'idHuesped',
+        titulo: 'Huéspedes', singular: 'huésped', nuevo: 'Nuevo', este: 'este', ruta: '/huespedes', id: 'idHuesped',
         campos: () => [
             { nombre: 'nombre', etiqueta: 'Nombre completo' },
             { nombre: 'documento', etiqueta: 'Documento (8–15 caracteres)' },
@@ -156,7 +156,7 @@ const catalogos = {
         ],
     },
     habitaciones: {
-        titulo: 'Habitaciones', singular: 'habitación', ruta: '/habitaciones', id: 'idHabitacion',
+        titulo: 'Habitaciones', singular: 'habitación', nuevo: 'Nueva', este: 'esta', ruta: '/habitaciones', id: 'idHabitacion',
         campos: async () => [
             { nombre: 'numero', etiqueta: 'Número' },
             { nombre: 'tipo', etiqueta: 'Tipo', tipo: 'select', opciones: await api.get('/habitaciones/tipos') },
@@ -172,7 +172,7 @@ const catalogos = {
         ],
     },
     servicios: {
-        titulo: 'Servicios adicionales', singular: 'servicio', ruta: '/servicios', id: 'idServicio',
+        titulo: 'Servicios adicionales', singular: 'servicio', nuevo: 'Nuevo', este: 'este', ruta: '/servicios', id: 'idServicio',
         campos: () => [
             { nombre: 'nombre', etiqueta: 'Nombre' },
             { nombre: 'precio', etiqueta: 'Precio (S/)', tipo: 'number', paso: '0.01', min: 0 },
@@ -208,7 +208,7 @@ async function vistaCatalogo(clave) {
             el('button', { class: 'btn chico', onclick: () => editar(r) }, 'Editar'),
             el('button', {
                 class: 'btn chico peligro', onclick: () => {
-                    if (confirm('¿Eliminar este ' + cfg.singular + '?')) {
+                    if (confirm('¿Eliminar ' + cfg.este + ' ' + cfg.singular + '?')) {
                         accion(api.eliminar(cfg.ruta + '/' + r[cfg.id]), recargar);
                     }
                 },
@@ -219,7 +219,7 @@ async function vistaCatalogo(clave) {
     contenido.replaceChildren(
         el('div', { class: 'encabezado' },
             el('h2', {}, cfg.titulo),
-            el('button', { class: 'btn primario', onclick: () => editar(null) }, '+ Nuevo ' + cfg.singular)),
+            el('button', { class: 'btn primario', onclick: () => editar(null) }, '+ ' + cfg.nuevo + ' ' + cfg.singular)),
         el('div', { class: 'tarjeta' }, tabla(columnas, registros))
     );
 }

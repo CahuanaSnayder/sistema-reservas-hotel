@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.sql.SQLException;
+
 /**
  * Traduce las excepciones de negocio a respuestas HTTP con un mensaje legible,
  * igual que SistemaController lo hace para la interfaz Swing.
@@ -46,6 +48,12 @@ public class ManejadorErrores {
 
     @ExceptionHandler(DataAccessException.class)
     ResponseEntity<Mensaje> baseDeDatos(DataAccessException e) {
+        // SQLState 23xxx = restricción violada (duplicado, registro en uso): conflicto esperado, no una caída.
+        if (e.getCause() instanceof SQLException sql && sql.getSQLState() != null
+                && sql.getSQLState().startsWith("23")) {
+            LOG.info("Operación rechazada por la base de datos: {}", e.getMessage());
+            return respuesta(HttpStatus.CONFLICT, e.getMessage());
+        }
         LOG.error("Error de acceso a datos", e);
         return respuesta(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage());
     }
