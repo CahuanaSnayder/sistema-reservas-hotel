@@ -25,14 +25,19 @@ public class AuthRestController {
     }
 
     @PostMapping("/login")
-    public Mensaje login(@RequestBody Login datos, HttpServletRequest request) {
-        authService.iniciarSesion(datos.usuario(), datos.contrasena());
+    public ResponseEntity<Mensaje> login(@RequestBody Login datos, HttpServletRequest request) {
+        try {
+            authService.iniciarSesion(datos.usuario(), datos.contrasena());
+        } catch (IllegalArgumentException e) {
+            // Credenciales vacías o incorrectas: no autenticado.
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Mensaje(e.getMessage()));
+        }
         HttpSession anterior = request.getSession(false);
         if (anterior != null) {
             anterior.invalidate(); // evita la fijación de sesión
         }
         request.getSession(true).setAttribute(SesionInterceptor.ATRIBUTO_USUARIO, datos.usuario().trim());
-        return new Mensaje("Sesión iniciada correctamente.");
+        return ResponseEntity.ok(new Mensaje("Sesión iniciada correctamente."));
     }
 
     @PostMapping("/logout")
