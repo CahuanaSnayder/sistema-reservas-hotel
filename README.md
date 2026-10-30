@@ -21,9 +21,33 @@ También se aplican los principios **SOLID** (repositorios como interfaces + iny
 ## Arquitectura
 
 ```
-view (Swing) → controller → service / ReservaFacade → repository (interfaces) → dao (JDBC) → PostgreSQL
-                                     ↘ patterns (builder, factory, adapter, observer, state, strategy)
+view (Swing) ──────→ controller ─┐
+                                 ├→ service / ReservaFacade → repository (interfaces) → dao (JDBC) → PostgreSQL
+frontend web (HTML/JS) → api ────┘        ↘ patterns (builder, factory, adapter, observer, state, strategy)
 ```
+
+El sistema tiene dos interfaces que comparten la misma lógica de negocio:
+
+- **Escritorio (Swing):** paquete `view`, se inicia con `Main`.
+- **Web:** el backend es una API REST con Spring Boot (paquete `api`) y el frontend es HTML/CSS/JS sin dependencias (`src/main/resources/static`). Se inicia con `api.WebApplication`.
+
+### API REST
+
+Todas las rutas (excepto `/api/auth/*`) requieren haber iniciado sesión.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/api/auth/login` · `/api/auth/logout` | Iniciar / cerrar sesión |
+| GET, POST | `/api/huespedes` | Listar / registrar huéspedes |
+| PUT, DELETE | `/api/huespedes/{id}` | Actualizar / eliminar huésped |
+| GET, POST, PUT, DELETE | `/api/habitaciones[/{id}]` | CRUD de habitaciones (`/tipos` lista los tipos) |
+| GET, POST, PUT, DELETE | `/api/servicios[/{id}]` | CRUD de servicios adicionales |
+| GET, POST | `/api/reservas` | Listar / registrar reservas (`/temporadas` lista las temporadas) |
+| POST | `/api/reservas/{id}/confirmar` · `check-in` · `check-out` · `cancelar` | Ciclo de vida (patrón State) |
+| DELETE | `/api/reservas/{id}` | Eliminar reserva pendiente o cancelada |
+| GET, POST | `/api/reservas/{id}/consumos` | Consumos de servicios de la reserva |
+| DELETE | `/api/consumos/{id}` | Retirar un consumo |
+| GET | `/api/reportes/huesped/{id}` · `/api/reportes/ocupacion` | Reportes (Factory Method) |
 
 ## Cómo ejecutar
 
@@ -33,7 +57,9 @@ view (Swing) → controller → service / ReservaFacade → repository (interfac
    ```
 2. Ejecutar el script `database/sistema_reservas_hotel.sql` sobre esa base.
 3. Revisar las credenciales en `config/ConexionPostgres.java` (por defecto `postgres` / `admin`) o definirlas con `-Ddb.url`, `-Ddb.user`, `-Ddb.password`.
-4. Abrir el proyecto en IntelliJ IDEA / NetBeans como proyecto Maven y ejecutar `Main`.
+4. Abrir el proyecto en IntelliJ IDEA / NetBeans como proyecto Maven y ejecutar:
+   - `Main` para la versión de escritorio, o
+   - `api.WebApplication` (o `mvn spring-boot:run`) para la versión web, y abrir **http://localhost:8080**.
 5. Iniciar sesión con **admin / admin** (la contraseña se convierte a hash PBKDF2 en el primer ingreso).
 
 ## Pruebas

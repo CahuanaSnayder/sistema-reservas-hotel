@@ -11,9 +11,28 @@
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>3.3.5</spring-boot.version>
     </properties>
 
+    <!-- Versiones de Spring Boot sin heredar del parent, para no alterar el resto del build -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <!-- Backend web: API REST + servidor de archivos estáticos (frontend) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -31,6 +50,8 @@
                 <configuration>
                     <release>17</release>
                     <encoding>UTF-8</encoding>
+                    <!-- Spring necesita los nombres de parámetros para @PathVariable -->
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>
@@ -44,6 +65,22 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <!-- mvn spring-boot:run levanta la versión web en http://localhost:8080 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>api.WebApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
